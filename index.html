@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EstacionMix Visual Radio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* RESET */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+
+background:#111;
+
+font-family:'Poppins',sans-serif;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+height:100vh;
+
+padding:5px;
+
+overflow:hidden;
+
+}
+
+/* PLAYER */
+
+#player{
+
+position:relative;
+
+width:100%;
+max-width:520px;
+
+background:
+linear-gradient(
+180deg,
+#2f7184,
+#15546a
+);
+
+padding:6px;
+
+border-radius:6px;
+
+overflow:hidden;
+
+box-shadow:
+0 0 30px rgba(0,0,0,.5);
+
+}
+
+/* BG BLUR */
+
+#bgBlur{
+
+position:absolute;
+inset:0;
+
+background-size:cover;
+background-position:center;
+
+filter:blur(35px);
+
+transform:scale(1.4);
+
+opacity:.45;
+
+z-index:1;
+
+transition:1.5s;
+
+}
+
+/* OVERLAY */
+
+#overlay{
+
+position:absolute;
+inset:0;
+
+background:
+linear-gradient(
+180deg,
+rgba(0,0,0,.15),
+rgba(0,0,0,.55)
+);
+
+z-index:2;
+
+}
+
+/* CONTENT */
+
+#content{
+
+position:relative;
+z-index:5;
+
+}
+
+/* IMAGE CONTAINER */
+
+#imageContainer{
+
+position:relative;
+
+width:100%;
+height:220px;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+overflow:hidden;
+
+/* IMPORTANTE */
+
+background-size:cover;
+background-position:center;
+
+}
+
+/* BLUR DETRAS DE IMAGEN */
+
+#imageContainer::before{
+
+content:"";
+
+position:absolute;
+inset:0;
+
+background:inherit;
+
+background-size:cover;
+background-position:center;
+
+filter:blur(25px);
+
+transform:scale(1.3);
+
+opacity:.6;
+
+z-index:1;
+
+}
+
+/* IMAGE */
+
+#artistImage{
+
+position:relative;
+z-index:5;
+
+width:100%;
+height:100%;
+
+object-fit:contain;
+
+padding:10px;
+
+transition:
+opacity 1.5s ease,
+transform 8s ease;
+
+filter:
+drop-shadow(
+0 0 20px rgba(0,0,0,.45)
+);
+
+}
+
+/* EFECTOS */
+
+.effect-zoom{
+transform:scale(1.08);
+}
+
+.effect-slide-left{
+transform:
+scale(1.05)
+translateX(-10px);
+}
+
+.effect-slide-right{
+transform:
+scale(1.05)
+translateX(10px);
+}
+
+.effect-slide-up{
+transform:
+scale(1.05)
+translateY(-10px);
+}
+
+.effect-rotate{
+transform:
+scale(1.05)
+rotate(1deg);
+}
+
+.effect-fade{
+opacity:.92;
+}
+
+/* BOTTOM BAR */
+
+#bottomBar{
+
+display:flex;
+align-items:center;
+
+padding:14px;
+
+gap:14px;
+
+}
+
+/* PLAY */
+
+#playBtn{
+
+width:58px;
+height:58px;
+
+border:none;
+border-radius:50%;
+
+background:#fff;
+
+color:#1b5d72;
+
+font-size:24px;
+
+cursor:pointer;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+transition:.3s;
+
+flex-shrink:0;
+
+}
+
+#playBtn:hover{
+
+transform:scale(1.05);
+
+}
+
+/* INFO */
+
+#info{
+
+flex:1;
+
+overflow:hidden;
+
+}
+
+/* SONG */
+
+#songTitle{
+
+font-size:18px;
+font-weight:700;
+
+color:#fff;
+
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+
+margin-bottom:4px;
+
+}
+
+/* ARTIST */
+
+#artistName{
+
+font-size:13px;
+
+color:#ddd;
+
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+
+}
+
+/* VOLUME */
+
+#volumeControl{
+
+width:90px;
+
+appearance:none;
+
+height:4px;
+
+background:
+rgba(255,255,255,.3);
+
+border-radius:20px;
+
+outline:none;
+
+cursor:pointer;
+
+}
+
+#volumeControl::-webkit-slider-thumb{
+
+appearance:none;
+
+width:14px;
+height:14px;
+
+background:#fff;
+
+border-radius:50%;
+
+}
+
+/* LIVE */
+
+#live{
+
+position:absolute;
+
+top:10px;
+left:10px;
+
+z-index:10;
+
+background:#ff0033;
+
+padding:4px 10px;
+
+border-radius:20px;
+
+font-size:10px;
+font-weight:700;
+
+color:#fff;
+
+letter-spacing:1px;
+
+}
+
+/* RESPONSIVE */
+
+@media(max-width:600px){
+
+#imageContainer{
+height:180px;
+}
+
+#songTitle{
+font-size:15px;
+}
+
+#playBtn{
+width:48px;
+height:48px;
+font-size:20px;
+}
+
+#volumeControl{
+width:65px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="player">
+
+<!-- BG -->
+
+<div id="bgBlur"></div>
+
+<!-- OVERLAY -->
+
+<div id="overlay"></div>
+
+<div id="content">
+
+<!-- IMAGE -->
+
+<div id="imageContainer">
+
+<div id="live">
+LIVE
+</div>
+
+<img
+id="artistImage"
+src="https://picsum.photos/900/600?random=1"
+alt="Artist">
+
+</div>
+
+<!-- BOTTOM -->
+
+<div id="bottomBar">
+
+<button id="playBtn">
+▶
+</button>
+
+<div id="info">
+
+<div id="songTitle">
+Cargando canción...
+</div>
+
+<div id="artistName">
+EstacionMix Radio
+</div>
+
+</div>
+
+<input
+type="range"
+id="volumeControl"
+min="0"
+max="1"
+step="0.01"
+value="1">
+
+</div>
+
+</div>
+
+<!-- AUDIO -->
+
+<audio
+id="audioPlayer"
+autoplay
+preload="auto">
+
+<source
+src="https://listen.openstream.co/6502/audio"
+type="audio/mpeg">
+
+</audio>
+
+</div>
+
+<script>
+
+/* RADIO API */
+
+const apiURL =
+'https://api.laut.fm/station/estacionmix/current_song';
+
+/* ELEMENTOS */
+
+const songTitle =
+document.getElementById('songTitle');
+
+const artistName =
+document.getElementById('artistName');
+
+const artistImage =
+document.getElementById('artistImage');
+
+const bgBlur =
+document.getElementById('bgBlur');
+
+const imageContainer =
+document.getElementById('imageContainer');
+
+const audioPlayer =
+document.getElementById('audioPlayer');
+
+const playBtn =
+document.getElementById('playBtn');
+
+const volumeControl =
+document.getElementById('volumeControl');
+
+/* PLAY */
+
+playBtn.addEventListener('click',()=>{
+
+if(audioPlayer.paused){
+
+audioPlayer.play();
+
+playBtn.innerHTML='❚❚';
+
+}else{
+
+audioPlayer.pause();
+
+playBtn.innerHTML='▶';
+
+}
+
+});
+
+/* VOLUMEN */
+
+volumeControl.addEventListener('input',()=>{
+
+audioPlayer.volume =
+volumeControl.value;
+
+});
+
+/* RANDOM IMAGES */
+
+const randomImages = [
+
+'https://picsum.photos/900/600?random=11',
+'https://picsum.photos/900/600?random=12',
+'https://picsum.photos/900/600?random=13',
+'https://picsum.photos/900/600?random=14',
+'https://picsum.photos/900/600?random=15'
+
+];
+
+/* CAMBIAR IMAGEN */
+
+function setImage(image){
+
+const effects = [
+
+'effect-zoom',
+'effect-slide-left',
+'effect-slide-right',
+'effect-slide-up',
+'effect-rotate',
+'effect-fade'
+
+];
+
+const effect =
+effects[
+Math.floor(
+Math.random() *
+effects.length
+)
+];
+
+/* LIMPIAR */
+
+artistImage.className = '';
+
+/* IMAGEN */
+
+artistImage.src = image;
+
+/* BG GENERAL */
+
+bgBlur.style.backgroundImage =
+`url(${image})`;
+
+/* BG INTERNO */
+
+imageContainer.style.backgroundImage =
+`url(${image})`;
+
+/* EFECTO */
+
+setTimeout(()=>{
+
+artistImage.classList.add(effect);
+
+},100);
+
+}
+
+/* OBTENER CARATULA */
+
+async function getArtistImage(artist,song){
+
+try{
+
+const response =
+await fetch(
+`https://itunes.apple.com/search?term=${encodeURIComponent(artist + ' ' + song)}&media=music&limit=1`
+);
+
+const data =
+await response.json();
+
+if(data.results &&
+data.results.length > 0){
+
+return data.results[0].artworkUrl100
+.replace('100x100','900x900');
+
+}
+
+return null;
+
+}catch(error){
+
+console.log(error);
+
+return null;
+
+}
+
+}
+
+/* SLIDESHOW */
+
+let slideInterval;
+
+async function startSlideshow(artist,song){
+
+clearInterval(slideInterval);
+
+/* COVER */
+
+const cover =
+await getArtistImage(
+artist,
+song
+);
+
+/* MOSTRAR COVER */
+
+if(cover){
+
+setImage(cover);
+
+}
+
+/* CONTADOR */
+
+let count = 0;
+
+/* LOOP */
+
+slideInterval = setInterval(()=>{
+
+count++;
+
+if(count % 2 === 0){
+
+if(cover){
+
+setImage(cover);
+
+}
+
+}else{
+
+const random =
+randomImages[
+Math.floor(
+Math.random() *
+randomImages.length
+)
+];
+
+setImage(random);
+
+}
+
+},10000);
+
+}
+
+/* ACTUALIZAR */
+
+async function updateSong(){
+
+try{
+
+const response =
+await fetch(apiURL,{
+cache:'no-store'
+});
+
+const song =
+await response.json();
+
+if(song && song.title){
+
+const titulo =
+song.title;
+
+const artista =
+(song.artist &&
+song.artist.name)
+? song.artist.name
+: 'Artista desconocido';
+
+songTitle.textContent =
+titulo;
+
+artistName.textContent =
+artista;
+
+/* START */
+
+startSlideshow(
+artista,
+titulo
+);
+
+}
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+/* START */
+
+updateSong();
+
+setInterval(updateSong,30000);
+
+</script>
+
+</body>
+</html>
