@@ -11,7 +11,9 @@
 
 <style>
 
-/* RESET */
+/* =========================
+RESET
+========================= */
 
 *{
 margin:0;
@@ -19,9 +21,19 @@ padding:0;
 box-sizing:border-box;
 }
 
+/* =========================
+HTML / BODY TRANSPARENTE
+========================= */
+
+html,
 body{
 
-background:#111;
+width:100%;
+height:100%;
+
+background:transparent !important;
+
+overflow:hidden;
 
 font-family:'Poppins',sans-serif;
 
@@ -29,15 +41,14 @@ display:flex;
 justify-content:center;
 align-items:center;
 
-height:100vh;
-
-padding:5px;
-
-overflow:hidden;
+padding:0;
+margin:0;
 
 }
 
-/* PLAYER */
+/* =========================
+PLAYER
+========================= */
 
 #player{
 
@@ -49,9 +60,11 @@ max-width:520px;
 background:
 linear-gradient(
 180deg,
-#2f7184,
-#15546a
+rgba(47,113,132,.88),
+rgba(21,84,106,.88)
 );
+
+backdrop-filter:blur(12px);
 
 padding:6px;
 
@@ -60,11 +73,13 @@ border-radius:6px;
 overflow:hidden;
 
 box-shadow:
-0 0 30px rgba(0,0,0,.5);
+0 0 30px rgba(0,0,0,.45);
 
 }
 
-/* BG BLUR */
+/* =========================
+BG BLUR
+========================= */
 
 #bgBlur{
 
@@ -86,7 +101,9 @@ transition:1.5s;
 
 }
 
-/* OVERLAY */
+/* =========================
+OVERLAY
+========================= */
 
 #overlay{
 
@@ -104,7 +121,9 @@ z-index:2;
 
 }
 
-/* CONTENT */
+/* =========================
+CONTENT
+========================= */
 
 #content{
 
@@ -113,7 +132,9 @@ z-index:5;
 
 }
 
-/* IMAGE CONTAINER */
+/* =========================
+IMAGE CONTAINER
+========================= */
 
 #imageContainer{
 
@@ -128,14 +149,16 @@ align-items:center;
 
 overflow:hidden;
 
-/* IMPORTANTE */
-
 background-size:cover;
 background-position:center;
 
+border-radius:4px;
+
 }
 
-/* BLUR DETRAS DE IMAGEN */
+/* =========================
+BLUR DETRAS DE IMAGEN
+========================= */
 
 #imageContainer::before{
 
@@ -153,13 +176,15 @@ filter:blur(25px);
 
 transform:scale(1.3);
 
-opacity:.6;
+opacity:.65;
 
 z-index:1;
 
 }
 
-/* IMAGE */
+/* =========================
+IMAGE
+========================= */
 
 #artistImage{
 
@@ -184,7 +209,9 @@ drop-shadow(
 
 }
 
-/* EFECTOS */
+/* =========================
+EFECTOS
+========================= */
 
 .effect-zoom{
 transform:scale(1.08);
@@ -218,7 +245,9 @@ rotate(1deg);
 opacity:.92;
 }
 
-/* BOTTOM BAR */
+/* =========================
+BOTTOM BAR
+========================= */
 
 #bottomBar{
 
@@ -231,7 +260,9 @@ gap:14px;
 
 }
 
-/* PLAY */
+/* =========================
+PLAY
+========================= */
 
 #playBtn{
 
@@ -257,6 +288,9 @@ transition:.3s;
 
 flex-shrink:0;
 
+box-shadow:
+0 0 15px rgba(255,255,255,.25);
+
 }
 
 #playBtn:hover{
@@ -265,7 +299,9 @@ transform:scale(1.05);
 
 }
 
-/* INFO */
+/* =========================
+INFO
+========================= */
 
 #info{
 
@@ -275,7 +311,9 @@ overflow:hidden;
 
 }
 
-/* SONG */
+/* =========================
+SONG
+========================= */
 
 #songTitle{
 
@@ -290,9 +328,14 @@ text-overflow:ellipsis;
 
 margin-bottom:4px;
 
+text-shadow:
+0 0 10px rgba(0,0,0,.35);
+
 }
 
-/* ARTIST */
+/* =========================
+ARTIST
+========================= */
 
 #artistName{
 
@@ -306,7 +349,9 @@ text-overflow:ellipsis;
 
 }
 
-/* VOLUME */
+/* =========================
+VOLUME
+========================= */
 
 #volumeControl{
 
@@ -338,9 +383,14 @@ background:#fff;
 
 border-radius:50%;
 
+box-shadow:
+0 0 10px rgba(255,255,255,.4);
+
 }
 
-/* LIVE */
+/* =========================
+LIVE
+========================= */
 
 #live{
 
@@ -364,9 +414,14 @@ color:#fff;
 
 letter-spacing:1px;
 
+box-shadow:
+0 0 10px rgba(255,0,51,.5);
+
 }
 
-/* RESPONSIVE */
+/* =========================
+RESPONSIVE
+========================= */
 
 @media(max-width:600px){
 
